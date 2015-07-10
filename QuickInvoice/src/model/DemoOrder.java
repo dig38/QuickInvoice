@@ -1,9 +1,12 @@
 package model;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -12,8 +15,12 @@ import java.util.List;
  * 
  */
 @Entity
-@Table(name="DEMO_ORDERS")
-@NamedQuery(name="DemoOrder.findAll", query="SELECT d FROM DemoOrder d")
+@Table(name="DEMO_ORDERS", schema="TESTUSER")
+@NamedQueries({
+	@NamedQuery(name="DemoOrder.findAll", query="SELECT d FROM DemoOrder d"),
+	@NamedQuery(name="DemoOrder.findOrderById", query="SELECT d FROM DemoOrder d where d.orderId = :orderId"),
+	@NamedQuery(name="DemoOrder.getMaxID", query="select max(d.orderId) from DemoOrder d")
+})
 public class DemoOrder implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -40,7 +47,7 @@ public class DemoOrder implements Serializable {
 
 	//bi-directional many-to-one association to DemoOrderItem
 	@OneToMany(mappedBy="demoOrder")
-	private List<DemoOrderItem> demoOrderItems;
+	private List<DemoOrderItem> demoOrderItems = new LinkedList<>();
 
 	public DemoOrder() {
 	}
