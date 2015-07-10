@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
 
 
@@ -9,16 +10,17 @@ import javax.persistence.*;
  * 
  */
 @Entity
-@Table(name="DEMO_STATES")
+@Table(name="DEMO_STATES", schema="TESTUSER")
 @NamedQuery(name="DemoState.findAll", query="SELECT d FROM DemoState d")
 public class DemoState implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	 
+	@Id
 	private String st;
-
+	
 	@Column(name="STATE_NAME")
 	private String stateName;
-
+	
 	public DemoState() {
 	}
 
