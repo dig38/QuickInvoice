@@ -2,83 +2,209 @@ package model;
 
 import static org.junit.Assert.*;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+
+import mytools.DBUtil;
+
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
+
 public class DemoOrderTest {
+	
+	private EntityManager em;
+	private EntityTransaction trans;
+	private BigDecimal total;
+	private DemoOrderItem orderItem;
+	private List<DemoOrderItem> orderItems;
+	private DemoUser user;
+	private DemoCustomer cust;
+	
+	@Before
+	public void setUp() {
+		em = DBUtil.getEmFactory().createEntityManager();
+		trans = em.getTransaction();
+		total = new BigDecimal(100);
+		orderItem = em.find(DemoOrderItem.class, 1l);
+		orderItems = new LinkedList<DemoOrderItem>();
+		orderItems.add(orderItem);
+		user = em.find(DemoUser.class, 1l);
+		cust = em.find(DemoCustomer.class, 1l);
+	}
+	
+	@After
+    public void tearDown() {
+        em.close();
+    }
 
 	@Test
 	public void testDemoOrder() {
-		fail("Not yet implemented");
+		DemoOrder order = new DemoOrder();
+		assertEquals("model.DemoOrder", order.getClass().getName());
 	}
 
 	@Test
 	public void testGetOrderId() {
-		fail("Not yet implemented");
+		DemoOrder order = (DemoOrder) em.createNamedQuery("DemoOrder.findOrderById").setParameter("orderId", 1L).getSingleResult();
+		assertEquals(order.getOrderId(), 1L);
 	}
 
 	@Test
 	public void testSetOrderId() {
-		fail("Not yet implemented");
+		DemoOrder order = new DemoOrder();
+		long maxID = (Long) em.createNamedQuery("DemoOrder.getMaxID").getSingleResult() + 1l;
+		order.setOrderId(maxID);
+		order.setOrderTotal(total);
+		order.setDemoOrderItems(orderItems);
+		order.setDemoUser(user);
+		order.setOrderTimestamp(new Date());
+		order.setDemoCustomer(cust);
+		trans.begin();
+		em.persist(order);
+		trans.commit();
+		DemoOrder dbOrder = (DemoOrder) em.createNamedQuery("DemoOrder.findOrderById").setParameter("orderId", maxID).getSingleResult();
+		assertEquals(dbOrder.getOrderId(), maxID);
 	}
 
 	@Test
 	public void testGetOrderTimestamp() {
-		fail("Not yet implemented");
+		DemoOrder order = (DemoOrder) em.createNamedQuery("DemoOrder.findOrderById").setParameter("orderId", 1L).getSingleResult();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+		String dbDate = sdf.format(order.getOrderTimestamp());
+		assertEquals(dbDate,"10-06-2015");
 	}
 
 	@Test
 	public void testSetOrderTimestamp() {
-		fail("Not yet implemented");
+		Date date = new Date();
+		DemoOrder order = new DemoOrder();
+		long maxID = (Long) em.createNamedQuery("DemoOrder.getMaxID").getSingleResult() + 1l;
+		order.setOrderId(maxID);
+		order.setOrderTotal(total);
+		order.setDemoOrderItems(orderItems);
+		order.setDemoUser(user);
+		order.setOrderTimestamp(date);
+		order.setDemoCustomer(cust);
+		trans.begin();
+		em.persist(order);
+		trans.commit();
+		DemoOrder dbOrder = (DemoOrder) em.createNamedQuery("DemoOrder.findOrderById").setParameter("orderId", maxID).getSingleResult();
+		assertNotNull(dbOrder.getOrderTimestamp());
 	}
 
 	@Test
 	public void testGetOrderTotal() {
-		fail("Not yet implemented");
+		DemoOrder order = (DemoOrder) em.createNamedQuery("DemoOrder.findOrderById").setParameter("orderId", 1L).getSingleResult();
+		assertEquals(order.getOrderTotal(), new BigDecimal(1890));
 	}
 
 	@Test
 	public void testSetOrderTotal() {
-		fail("Not yet implemented");
+		DemoOrder order = new DemoOrder();
+		long maxID = (Long) em.createNamedQuery("DemoOrder.getMaxID").getSingleResult() + 1l;
+		order.setOrderId(maxID);
+		order.setOrderTotal(total);
+		order.setDemoOrderItems(orderItems);
+		order.setDemoUser(user);
+		order.setOrderTimestamp(new Date());
+		order.setDemoCustomer(cust);
+		trans.begin();
+		em.persist(order);
+		trans.commit();
+		DemoOrder dbOrder = (DemoOrder) em.createNamedQuery("DemoOrder.findOrderById").setParameter("orderId", maxID).getSingleResult();
+		assertNotNull(dbOrder.getOrderTotal());
 	}
 
 	@Test
 	public void testGetDemoCustomer() {
-		fail("Not yet implemented");
+		DemoOrder order = (DemoOrder) em.createNamedQuery("DemoOrder.findOrderById").setParameter("orderId", 1L).getSingleResult();
+		assertNotNull(order.getDemoCustomer());
 	}
 
 	@Test
 	public void testSetDemoCustomer() {
-		fail("Not yet implemented");
+		DemoOrder order = new DemoOrder();
+		long maxID = (Long) em.createNamedQuery("DemoOrder.getMaxID").getSingleResult() + 1l;
+		order.setOrderId(maxID);
+		order.setOrderTotal(total);
+		order.setDemoOrderItems(orderItems);
+		order.setDemoUser(user);
+		order.setOrderTimestamp(new Date());
+		order.setDemoCustomer(cust);
+		trans.begin();
+		em.persist(order);
+		trans.commit();
+		DemoOrder dbOrder = (DemoOrder) em.createNamedQuery("DemoOrder.findOrderById").setParameter("orderId", maxID).getSingleResult();
+		assertNotNull(dbOrder.getDemoCustomer());
 	}
 
 	@Test
 	public void testGetDemoUser() {
-		fail("Not yet implemented");
+		DemoOrder order = (DemoOrder) em.createNamedQuery("DemoOrder.findOrderById").setParameter("orderId", 1L).getSingleResult();
+		assertNotNull(order.getDemoUser());
 	}
 
 	@Test
 	public void testSetDemoUser() {
-		fail("Not yet implemented");
+		DemoOrder order = new DemoOrder();
+		long maxID = (Long) em.createNamedQuery("DemoOrder.getMaxID").getSingleResult() + 1l;
+		order.setOrderId(maxID);
+		order.setOrderTotal(total);
+		order.setDemoOrderItems(orderItems);
+		order.setDemoUser(user);
+		order.setOrderTimestamp(new Date());
+		order.setDemoCustomer(cust);
+		trans.begin();
+		em.persist(order);
+		trans.commit();
+		DemoOrder dbOrder = (DemoOrder) em.createNamedQuery("DemoOrder.findOrderById").setParameter("orderId", maxID).getSingleResult();
+		assertNotNull(order.getDemoUser());
 	}
 
 	@Test
 	public void testGetDemoOrderItems() {
-		fail("Not yet implemented");
+		DemoOrder order = (DemoOrder) em.createNamedQuery("DemoOrder.findOrderById").setParameter("orderId", 1L).getSingleResult();
+		assertNotNull(order.getDemoOrderItems());
 	}
 
 	@Test
 	public void testSetDemoOrderItems() {
-		fail("Not yet implemented");
+		DemoOrder order = new DemoOrder();
+		long maxID = (Long) em.createNamedQuery("DemoOrder.getMaxID").getSingleResult() + 1l;
+		order.setOrderId(maxID);
+		order.setOrderTotal(total);
+		order.setDemoOrderItems(orderItems);
+		order.setDemoUser(user);
+		order.setOrderTimestamp(new Date());
+		order.setDemoCustomer(cust);
+		trans.begin();
+		em.persist(order);
+		trans.commit();
+		DemoOrder dbOrder = (DemoOrder) em.createNamedQuery("DemoOrder.findOrderById").setParameter("orderId", maxID).getSingleResult();
+		assertNotNull(order.getDemoUser());
 	}
 
 	@Test
 	public void testAddDemoOrderItem() {
-		fail("Not yet implemented");
+		DemoOrder order = new DemoOrder();
+		order.addDemoOrderItem(orderItem);
+		assertNotNull(order.getDemoOrderItems());
 	}
 
 	@Test
 	public void testRemoveDemoOrderItem() {
-		fail("Not yet implemented");
+		DemoOrder order = new DemoOrder();
+		order.addDemoOrderItem(orderItem);
+		order.removeDemoOrderItem(orderItem);
+		assertEquals(order.getDemoOrderItems().size(), 0);
 	}
 
 }
